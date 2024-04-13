@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const postItems = createContext({
     postList: [],
     addPost: () => { },
-    addInitialPosts: () => { },
+    fetching: false,
     deletePost: () => { },
 });
 
@@ -50,17 +50,10 @@ const PostItemsProvider = ({ children }) => {
 
     const [postList, dispatchPostList] = useReducer(postListReducer, []);
 
-    const addPost = (userId, postTitle, postBody, reactions, tags) => {
+    const addPost = (post) => {
         dispatchPostList({
             type: "ADD_POST",
-            payload: {
-                id: Date.now(),
-                title: postTitle,
-                body: postBody,
-                reactions: reactions,
-                userId: userId,
-                tags: tags,
-            }
+            payload: post,
         })
     }
     const deletePost = (postId) => {
@@ -79,10 +72,30 @@ const PostItemsProvider = ({ children }) => {
             },
         });
     };
+    const [fetching, setFetching] = useState(false);
 
+    //comment this useeffect to use local data
+    useEffect(() => {
+        setFetching(true)
+
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        fetch("https://dummyjson.com/posts", { signal })
+            .then((res) => res.json())
+            .then((data) => {
+                addInitialPosts(data.posts);
+                setFetching(false)
+            })
+
+        return () => {
+            controller.abort()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
-        <postItems.Provider value={{ postList, addPost, addInitialPosts, deletePost }}>
+        <postItems.Provider value={{ postList, addPost, fetching, deletePost }}>
             {children}
         </postItems.Provider>
     )
