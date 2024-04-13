@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const postItems = createContext({
     postList: [],
     addPost: () => { },
+    addInitialPosts: () => { },
     deletePost: () => { },
 });
 
@@ -16,6 +17,9 @@ const postListReducer = (currPostList, action) => {
     }
     else if (action.type === "DELETE_POST") {
         newPostList = currPostList.filter(post => post.id !== action.payload.postId)
+    }
+    else if (action.type === "ADD_INITIAL_POSTS") {
+        newPostList = action.payload.posts
     }
     return newPostList
 }
@@ -44,11 +48,7 @@ const PostItemsProvider = ({ children }) => {
     //     // },
     // ]
 
-    const [postList, dispatchPostList] = useReducer(postListReducer, JSON.parse(localStorage.getItem('posts')) || []);
-
-    useEffect(() => {
-        localStorage.setItem('posts', JSON.stringify(postList));
-    }, [postList]);
+    const [postList, dispatchPostList] = useReducer(postListReducer, []);
 
     const addPost = (userId, postTitle, postBody, reactions, tags) => {
         dispatchPostList({
@@ -71,9 +71,18 @@ const PostItemsProvider = ({ children }) => {
             }
         })
     }
+    const addInitialPosts = (posts) => {
+        dispatchPostList({
+            type: "ADD_INITIAL_POSTS",
+            payload: {
+                posts,
+            },
+        });
+    };
+
 
     return (
-        <postItems.Provider value={{ postList, addPost, deletePost }}>
+        <postItems.Provider value={{ postList, addPost, addInitialPosts, deletePost }}>
             {children}
         </postItems.Provider>
     )
