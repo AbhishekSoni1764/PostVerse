@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const postItems = createContext({
@@ -44,7 +44,11 @@ const PostItemsProvider = ({ children }) => {
     //     // },
     // ]
 
-    const [postList, dispatchPostList] = useReducer(postListReducer, []);
+    const [postList, dispatchPostList] = useReducer(postListReducer, JSON.parse(localStorage.getItem('posts')) || []);
+
+    useEffect(() => {
+        localStorage.setItem('posts', JSON.stringify(postList));
+    }, [postList]);
 
     const addPost = (userId, postTitle, postBody, reactions, tags) => {
         dispatchPostList({
