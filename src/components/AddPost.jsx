@@ -1,5 +1,6 @@
 import { useContext, useRef } from "react"
 import { postItems } from "../store/post-list-store"
+import { useNavigate } from "react-router-dom";
 
 export default function AddPost() {
     const { addPost } = useContext(postItems)
@@ -9,6 +10,7 @@ export default function AddPost() {
     const postBodyElement = useRef();
     const reactionsElement = useRef();
     const tagsElement = useRef();
+    const navigate = useNavigate();
 
 
     const handleSubmit = (event) => {
@@ -39,6 +41,7 @@ export default function AddPost() {
             .then((res) => res.json())
             .then((post) => {
                 addPost(post)
+                navigate("/")
             });
     };
 
@@ -46,23 +49,23 @@ export default function AddPost() {
         <form className="form-container" onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label htmlFor="userId" className="form-label" placeholder="Enter your User ID Here ..">User ID</label>
-                <input type="text" ref={userIdElement} className="form-control" id="userId" />
+                <input type="text" ref={userIdElement} className="form-control" id="userId" required />
             </div>
             <div className="mb-3">
                 <label htmlFor="heading" className="form-label">Post Title</label>
-                <input type="text" ref={postTitleElement} className="form-control" id="heading" placeholder="How are you feeling today..." />
+                <input type="text" ref={postTitleElement} className="form-control" id="heading" placeholder="How are you feeling today..." required />
             </div>
             <div className="mb-3">
                 <label htmlFor="body" className="form-label">Post Content</label>
-                <textarea type="text" ref={postBodyElement} rows="4" className="form-control" id="body" placeholder="Tell us more about it" />
+                <textarea type="text" ref={postBodyElement} rows="4" className="form-control" id="body" placeholder="Tell us more about it" required />
             </div>
             <div className="mb-3">
                 <label htmlFor="reactions" className="form-label">No of Reactions</label>
-                <input type="text" ref={reactionsElement} className="form-control" id="reactions" placeholder="How many people reacted to this post" />
+                <input type="text" ref={reactionsElement} className="form-control" id="reactions" placeholder="How many people reacted to this post" required />
             </div>
             <div className="mb-3">
                 <label htmlFor="hashtags" className="form-label">Hashtags with Space...</label>
-                <input type="text" ref={tagsElement} className="form-control" id="hashtags" placeholder="Please enter tags using space" />
+                <input type="text" ref={tagsElement} className="form-control" id="hashtags" placeholder="Please enter tags using space" required />
             </div>
             <button type="submit" className="btn btn-primary">Post</button>
         </form>
