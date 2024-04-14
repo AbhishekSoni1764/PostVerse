@@ -2,17 +2,18 @@
 import { CNavItem, CSidebar, CSidebarBrand, CSidebarHeader, CSidebarNav } from "@coreui/react";
 import CIcon from '@coreui/icons-react';
 import { cilSpeedometer } from '@coreui/icons';
+import { Link } from "react-router-dom";
 
-export default function Sidebar({ tabSelected, setTabSelected }) {
+export default function Sidebar() {
     return (
         <CSidebar className="border-end sb" narrow>
             <CSidebarHeader className="border-bottom">
                 <CSidebarBrand className="sidebar-logo">SOCIALS</CSidebarBrand>
             </CSidebarHeader>
             <CSidebarNav className="sb-nav">
-                <button className={`side-button ${tabSelected === "Home" && "active"}`} onClick={() => { setTabSelected("Home") }}><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Home</CNavItem></button>
-                <button className={`side-button ${tabSelected === "Create Post" && "active"}`} onClick={() => { setTabSelected("Create Post") }}><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />New Post</CNavItem></button>
-            </CSidebarNav>
+                <CNavItem><Link to="/" className="link"><button className="side-button" ><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Home</button></Link></CNavItem>
+                <CNavItem><Link to="/create-post" className="link"><button className="side-button" ><CIcon customClassName="nav-icon" icon={cilSpeedometer} />New Post</button></Link></CNavItem>
+            </CSidebarNav >
         </CSidebar >
     )
 }

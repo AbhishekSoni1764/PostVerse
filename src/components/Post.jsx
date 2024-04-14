@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 export default function Post({ post, deletePost }) {
     return (
-        <div className="card" style={{ width: "25rem", marginBottom: "40px", height: "479px" }}>
+        <div className="card box" style={{ width: "25rem", marginBottom: "40px", height: "479px" }}>
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" onClick={() => deletePost(post.id)}>
                 X
             </span>
